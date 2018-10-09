@@ -5,7 +5,7 @@ with open("README.rst", "r") as fh:
 
 setuptools.setup(
     name="dorna",
-    version="1.2.4",
+    version="1.2.5",
     author="Hossein Yazdi",
     author_email="api@dorna.ai",
     description="Dorna API",
@@ -21,6 +21,8 @@ setuptools.setup(
         'Topic :: Software Development :: Libraries :: Python Modules',
     ],
     install_requires=[
+        "setuptools",
+        "PyYAML",
         "numpy",
         "pyserial",
     ],
