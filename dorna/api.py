@@ -1,44 +1,3 @@
-"""
-command state:
-when we enter commands for the play, they all assigned 0
-Next we start preprocessing them by the API and assign 1
-Single command(possibly multiple Gcodes) are assign for sending 2
-
-When all send  we assign 3 to that command
-After receiving line that will be 4
-Next comming line gives 5 
-
-# before process by the API
-0 => not processed
-
-# sending: 1
-1 => processed by the API, but not send  
-# sending: 2
-2 => sending (only one command in this at a time)
-
-# after send
-3 => not processed (no line)
-4 => processing (line received)
-5 => done (the next line also received)
-
-6 => cancled command
-
-state: 
-		[0,1]: not processed
-		[2,3,4]: running
-		[5]: completed
-		[6]: canceled
-
-halt(): stops the robot instantly, empty 0, 1, 2, and send it to 6
-
-pause(): empty 0, 1 and send it to 6
-
-connection => 0: disconnected, 1: connecting, 2: connected
-state => 0: stopped, 1 : running, 0.5 stopping
-"""
-
-
-
 # decimal
 # setup the structure here
 # connect to port
@@ -64,7 +23,7 @@ import re
 # =================================================================
 # print
 # =================================================================
-_prnt = True 
+_prnt = False 
 def _printx(enable = True, *arg):
 	if enable:
 		print(arg)
@@ -287,7 +246,7 @@ class Dorna(_port_usb, easy_method):
 		# =================================================================
 		# module name: "api", "dorna"
 		# =================================================================
-		self._mn = "api"
+		self._mn = "dorna"
 
 		super(Dorna, self).__init__()
 		# =================================================================
