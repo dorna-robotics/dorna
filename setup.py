@@ -5,12 +5,12 @@ with open("README.rst", "r") as fh:
 
 setuptools.setup(
     name="dorna",
-    version="1.2.5",
-    author="Hossein Yazdi",
-    author_email="api@dorna.ai",
-    description="Dorna API",
+    version="1.3",
+    author="Dorna Robotics",
+    author_email="info@dorna.ai",
+    description="Dorna Python API",
     long_description=readme,
-    url="https://github.com/smhty/dorna",
+    url="https://github.com/dorna-robotics/dorna",
     packages=setuptools.find_packages(),
     classifiers=[
         'Intended Audience :: Developers',
