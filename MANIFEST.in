@@ -1,4 +1,4 @@
-include README.rst
+include README.md
 recursive-include dorna/resources *	
 include dorna/*.yaml
 include dorna/*.pyd
