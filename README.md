@@ -1,5 +1,5 @@
 # Dorna
-The official Python library for the Dorna API V1.3
+The official Python library for the [Dorna API V1.3][dorna]
 
 # Wiki
 For the full documentation visit the [dorna Wiki page][wiki].
@@ -31,4 +31,5 @@ Import the module and create a `Dorna` object for interacting with the API:
 from dorna import Dorna
 robot = Dorna()
 ```
+[dorna]:https://www.dorna.ai/
 [wiki]:https://github.com/dorna-robotics/dorna/wiki
