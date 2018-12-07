@@ -897,7 +897,9 @@ class Dorna(_port_usb, easy_method):
 				[{"command": "g2core", "prm": "{sr: n}"}],
 				[{"command": "set_toolhead", "prm": {"x": self._config["toolhead"]["x"]}}, {"command": "move", "prm":{"path": "joint", "movement": 1, "speed": self._config["default_speed"]["joint"], "j0": 0, "jerk": list(self._config["default_jerk"]["joint"])}},{"command": "g2core", "prm": "{tt32:n}"}, {"command": "set_motion", "prm": self._config["motion"]}]
 			]
-
+			# pop job[1]
+			job.pop(1)
+			
 			# number of jobs
 			_init_num = [0]
 			for j in job:
