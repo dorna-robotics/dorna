@@ -463,7 +463,7 @@ class Dorna(_port_usb, easy_method):
 
 		# port name is given
 		if port_name:
-			result = self._update_firmware(port_name, firmware_path)
+			result = json.loads(self._update_firmware(port_name, firmware_path))
 			if not result["status"]:
 				return result			
 		else:
