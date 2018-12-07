@@ -1,7 +1,3 @@
-# decimal
-# setup the structure here
-# connect to port
-# send and receive data
 # =================================================================
 # imports
 # =================================================================
@@ -590,15 +586,22 @@ class Dorna(_port_usb, easy_method):
 
 
 	def _command_by_id(self, id_list):
-		# sanitate
+		# sanitate only int or list of int
 		if type(id_list) is not list:
 			id_list = [id_list]
 		# sort
 		id_list.sort()
 		
+
 		# search
 		_command = []
 		command_index = 5
+		
+		# every id is an integer
+		if any([type(x) != int for x in id_list]):
+			return _command
+
+
 		#_id = id_list.pop(0)
 		while id_list and command_index >= 0:
 			result = next((item for item in self._system["command"][command_index] if item["id"] == id_list[0]), None)
@@ -617,23 +620,34 @@ class Dorna(_port_usb, easy_method):
 		state_list.sort(reverse=True)
 
 		_command = []
+
 		for state in state_list:
 			_command += self._system["command"][state]
 
 		return _command
 
-	def command(self, **prm):
+
+	def command(self, prm):
+		# json
+		if type(prm) == str:
+			try:
+				prm = json.loads(prm)
+			except:
+				prm = False
 		_result = []
-		if "id" in prm:
+		if type(prm) == dict and "id" in prm:
 			_result = self._command_by_id(prm["id"])
-		elif "state" in prm:
+		elif type(prm) == dict and "state" in prm:
 			_state = [[0,1], [2,3,4], [5]]
 			state = []
 			if type(prm["state"]) != list:
 				prm["state"] = [prm["state"]] 
 			
 			for s in prm["state"]:
-				state += _state[s]
+				try:
+					state += _state[s]
+				except:
+					pass
 			_result = self._command_by_state(state)
 		
 		_result = self._command_mask(_result)
@@ -897,9 +911,9 @@ class Dorna(_port_usb, easy_method):
 				[{"command": "g2core", "prm": "{sr: n}"}],
 				[{"command": "set_toolhead", "prm": {"x": self._config["toolhead"]["x"]}}, {"command": "move", "prm":{"path": "joint", "movement": 1, "speed": self._config["default_speed"]["joint"], "j0": 0, "jerk": list(self._config["default_jerk"]["joint"])}},{"command": "g2core", "prm": "{tt32:n}"}, {"command": "set_motion", "prm": self._config["motion"]}]
 			]
-			# pop job[1]
-			job.pop(1)
-			
+
+			job.pop(1)			
+
 			# number of jobs
 			_init_num = [0]
 			for j in job:
@@ -1311,7 +1325,8 @@ class Dorna(_port_usb, easy_method):
 
 		if append or self._device["state"] == 0:
 			id_list = self._append_commands(commands)
-			return self.command(id = id_list)
+			#return self.command(id = id_list)
+			return self.command({"id": id_list})
 			#return True 		
 		else:
 			_flush_result = self._flush_commands()
