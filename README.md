@@ -7,13 +7,14 @@ For the full documentation visit the [dorna Wiki page][wiki].
 # Quick start
 
 ## Installation
-The latest version of the API is available on [PyPI](https://pypi.org/project/dorna/) and [GitHub](https://github.com/dorna-robotics/dorna).  
-
+The latest version of the API is available on [GitHub](https://github.com/dorna-robotics/dorna).  
+<!--
 **PyPI**  
 To install the package from the PyPI server, simply use the `pip` command in command line:
 ```bash
 pip install dorna
 ```
+-->
 **GitHub**  
 Another option is to first clone the repository from GitHub directly:
 ```bash
