@@ -374,6 +374,7 @@ class Dorna(_port_usb, easy_method):
 				for line in p.stdout:
 
 					line_last = line
+					_printx(_prnt,line)
 					
 					# check fro (fff/fff)
 					if all([x in line for x in ["(","/"," pages)", "%"]]):
