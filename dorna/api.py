@@ -339,9 +339,11 @@ class Dorna(_port_usb, easy_method):
 		# baud
 		try:
 			for cmd in baud:
+				time.sleep(0.5)
 				#check_output(cmd, shell=True).decode()
 
-				sp = Popen(cmd.split(), shell=True, stdout=PIPE,stderr=PIPE, bufsize=1, universal_newlines=True)
+				#sp = Popen(cmd.split(), shell=True, stdout=PIPE,stderr=PIPE, bufsize=1, universal_newlines=True)
+				sp = Popen(cmd, shell=True, stdout=PIPE,stderr=PIPE, bufsize=1, universal_newlines=True)
 				sp.communicate()
 
 			return True
