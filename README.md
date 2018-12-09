@@ -18,7 +18,7 @@ pip install dorna
 **GitHub**  
 Another option is to first clone the repository from GitHub directly:
 ```bash
-git clone https://github.com/dorna-robotics/dorna.git
+git clone https://github.com/dorna-robotics/dorna.git --branch 1.3.0
 ```
 Then run the `setup.py` file from that directory,
 ```bash
