@@ -16,11 +16,7 @@ pip install dorna
 ```
 -->
 **GitHub**  
-Clone the  repository from GitHub directly:
-```bash
-git clone https://github.com/dorna-robotics/dorna.git --branch 1.3.0
-```
-Then run the `setup.py` file from that directory,
+Check the [latest release page][latest] for download. Download the compressed source code file ( for example `Source code.zip` or `Source code.tar.gz`). After download, uncompress the file, go to the uncompressed directory, and run:
 ```bash
 python setup.py install
 ```
@@ -35,3 +31,4 @@ robot = Dorna()
 [dorna]:https://www.dorna.ai/
 [wiki]:https://github.com/dorna-robotics/dorna/wiki
 [g2core]: https://github.com/synthetos/g2/wiki
+[latest]: https://github.com/dorna-robotics/dorna/releases/latest
