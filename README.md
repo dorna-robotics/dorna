@@ -17,7 +17,7 @@ pip install dorna
 -->
 **GitHub**  
 Check the [latest release page][latest] for download. Download the compressed source code file ( for example `Source code.zip` or `Source code.tar.gz`).  
-After download, uncompress the file, go to the uncompressed directory, and run:
+After download, decompress the file, go to the directory, and run:
 ```bash
 python setup.py install
 ```
