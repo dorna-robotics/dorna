@@ -2453,9 +2453,13 @@ class Dorna(_port_usb, easy_method):
 			jerk (not joint)
 		"""
 		if self._config["unit"]["length"] == "mm":
-			_key = [k for k in ["x", "y", "z", "speed"] if k in prm]
+			_key = [k for k in ["x", "y", "z"] if k in prm]
 			for k in _key:
 				prm[k] = self._mm_to_inch(prm[k])
+			
+			if "speed" in prm and prm["path"] != "joint":
+				prm["speed"] = self._mm_to_inch(prm["speed"])
+
 			if "jerk" in prm and prm["path"] != "joint":
 				_jerk = [self._mm_to_inch(x) for x in prm["jerk"]]
 				prm["jerk"] = self._jerk_mm_to_inch(prm["jerk"])
