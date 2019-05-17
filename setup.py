@@ -5,12 +5,16 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="dorna",
-    version="1.3",
+    version="1.4.1",
     author="Dorna Robotics",
     author_email="info@dorna.ai",
     description="Dorna Python API",
     long_description=readme,
-    url="https://github.com/dorna-robotics/dorna",
+    long_description_content_type='text/markdown',
+    url="https://dorna.ai/",
+    project_urls={
+        'Latest release': 'https://github.com/dorna-robotics/dorna/releases/',
+    },    
     packages=setuptools.find_packages(),
     classifiers=[
         'Intended Audience :: Developers',
@@ -26,6 +30,7 @@ setuptools.setup(
         "numpy",
         "pyserial",
     ],
+    license="MIT",
     include_package_data=True,
     zip_safe = False,
 )
