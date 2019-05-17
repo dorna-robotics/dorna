@@ -249,14 +249,47 @@ class easy_method(object):
 
 	"""
 	prm:
-		dict
-		json-dict
+		gcode = None, list, json list 
+		gcode_path = None, string, json, list
+		fulfill = True, 
+		append = True,
 	"""
-	def play_gcode(self, gc = None, file = None, fulfill = True, append = True):
-		# sanitate the parameters
-		# read the file
-		# 
-		return 0
+	def play_gcode(self, gcode_path = None, gcode = None, fulfill = True, append = True, **kwargs):
+		
+		data = False
+		# open gcode_path
+		if gcode_path:
+			try:
+				with open(gcode_path, 'r') as f:
+					data = f.read().splitlines()							
+			except:
+				data = False
+
+		# gcode: list, str, JSON, 
+		if gcode:
+			# str to data (dict or list)
+			if type(gcode) == str:
+				try:
+					data = json.loads(gcode)
+				except:
+					data = False
+
+			if type(data) == dict:
+				data = [data]
+			elif type(data) == list:
+				if any([type(j) != dict or type(j) != str for j in data]):
+					data = False
+			else:
+				data = False
+
+		try:
+			commands = [{"command": "g2core", "prm": d, "fulfill": fulfill} for d in data]
+		except:
+			_rtn = {"error": 1 , "message": "not a valid input format"}
+			self._log_add(_rtn, "play_gcode")
+			return json.dumps(_rtn)
+
+		return self.play(commands, append)
 
 
 
@@ -990,7 +1023,7 @@ class Dorna(_port_usb, easy_method):
 		connection => 0: disconnected, 1: connecting, 2: connected
 		state => 0: stopped, 1 : running, 0.5 stopping
 		"""
-		self._device = {"id": None, "connection": 0,  "port": None, "fv": None, "config": None, "state": None, "version": "1.4.1"}
+		self._device = {"id": None, "connection": 0,  "port": None, "fv": None, "config": None, "state": None, "version": "1.4.2"}
 
 		# travel
 		self._travel = np.array([None,None,None,None,None,None]) # 6 axis

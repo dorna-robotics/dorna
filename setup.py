@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="dorna",
-    version="1.4.1",
+    version="1.4.2",
     author="Dorna Robotics",
     author_email="info@dorna.ai",
     description="Dorna Python API",
@@ -18,8 +18,6 @@ setuptools.setup(
     packages=setuptools.find_packages(),
     classifiers=[
         'Intended Audience :: Developers',
-        "Programming Language :: Python :: 3.5",
-        'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
         "Operating System :: OS Independent",
         'Topic :: Software Development :: Libraries :: Python Modules',
