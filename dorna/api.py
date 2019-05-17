@@ -251,10 +251,8 @@ class easy_method(object):
 	prm:
 		gcode = None, list, json list 
 		gcode_path = None, string, json, list
-		fulfill = True, 
-		append = True,
 	"""
-	def play_gcode(self, gcode_path = None, gcode = None, fulfill = True, append = True, **kwargs):
+	def play_gcode(self, gcode_path = None, gcode = None, **kwargs):
 		
 		data = False
 		# open gcode_path
@@ -283,13 +281,16 @@ class easy_method(object):
 				data = False
 
 		try:
-			commands = [{"command": "g2core", "prm": d, "fulfill": fulfill} for d in data]
+			commands = [{"command": "g2core", "prm": d} for d in data]
 		except:
 			_rtn = {"error": 1 , "message": "not a valid input format"}
 			self._log_add(_rtn, "play_gcode")
 			return json.dumps(_rtn)
 
-		return self.play(commands, append)
+		# xyz space
+		self.play({"command": "move", "prm": {"path": "line", "movement": 1, "x": 0}}, append = False)
+		
+		return self.play(commands)
 
 
 
@@ -1165,6 +1166,7 @@ class Dorna(_port_usb, easy_method):
 				result = self._connect(port, file_init)
 				result = json.loads(result)
 				if result["connection"] == 2:
+					self.set_joint([0,0,0,0,0])
 					return self.device()
 
 		return self._port_close()
