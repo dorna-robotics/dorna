@@ -419,6 +419,8 @@ class Dorna(_port_usb, easy_method):
 		elif platform == "darwin": # mac
 			bossac_path = resource_filename(self._mn, 'resources/mac/bossac')
 			bossac = ["sudo", bossac_path, "-U", "true", "-e", "-w", "-v", "-b", bin_path, "-R"]
+			self._bossac_exe(bossac_path)
+
 		else: # linux
 			bossac_path = "bossac"
 			if "/dev/" in port_name:
@@ -558,6 +560,19 @@ class Dorna(_port_usb, easy_method):
 		if line_last.strip() in ["CPU reset.", "Set boot flash true"]:
 			return True
 		return False
+
+
+	def _bossac_exe(self, bossac_path):
+		# form the command
+		bossac = ["sudo", "chmod", "+x", bossac_path]
+
+		# run the command
+		sp = Popen(bossac, shell=False, stdout=PIPE,stderr=PIPE, bufsize=1, universal_newlines=True)
+		out, err = sp.communicate()
+		out = out.splitlines()
+		err = err.splitlines()
+		for line in out + err:
+			_printx(self._prnt, line)
 
 	def reset_board(self, port_name = None):
 		# bin_path = "./resources/firmware/firmware.bin"
