@@ -15,9 +15,8 @@ pip install dorna
 
 **GitHub**  
 To install the Python package from github, you need to clone the repository first. 
-git clone https://github.com/dorna-robotics/dorna.git
 ```bash
-git clone https://github.com/YOUR-USERNAME/YOUR-REPOSITORY
+git clone https://github.com/dorna-robotics/dorna.git
 ```
 After download, go to the directory, and run:
 ```bash
