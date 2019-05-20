@@ -14,7 +14,7 @@ pip install dorna
 ```
 
 **GitHub**  
-To install the Python package from github, you need to clone the repository first. 
+To install the Python package from GitHub, you need to clone the repository first.
 ```bash
 git clone https://github.com/dorna-robotics/dorna.git
 ```
