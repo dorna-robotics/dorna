@@ -4,14 +4,7 @@
 ## Wiki
 For the full documentation visit the [dorna Wiki page][wiki].
 
-
 ## Installation
-
-**PyPI**  
-To install the package from the PyPI server, simply use the `pip` command:
-```bash
-pip install dorna
-```
 
 **GitHub**  
 To install the Python package from GitHub, you need to clone the repository first.

@@ -1181,7 +1181,7 @@ class Dorna(_port_usb, easy_method):
 				result = self._connect(port, file_init)
 				result = json.loads(result)
 				if result["connection"] == 2:
-					self.set_joint([0,0,0,0,0])
+					#self.set_joint([0,0,0,0,0])
 					return self.device()
 
 		return self._port_close()
@@ -1344,7 +1344,7 @@ class Dorna(_port_usb, easy_method):
 			_printx(self._prnt,"error: ",x)
 			return self._port_close()
 
-	def set_joint(self, prm):
+	def set_joint(self, prm, append = False):
 		# joints are valid
 		if any(self._joint == None):
 			return None
@@ -1371,7 +1371,7 @@ class Dorna(_port_usb, easy_method):
 
 		# set joint
 		command = [{"command": "set_joint", "prm": prm}]
-		result = self.play(command, False)
+		result = self.play(command, append)
 		result = json.loads(result)
 		"""
 		if result["id"] == None:
@@ -1445,6 +1445,28 @@ class Dorna(_port_usb, easy_method):
 
 	# args: j0, j1, j2, j3 or j4
 	# 		list or JSON list
+	def home_v2(self, prm):
+		try:
+			prm = json.loads(prm)
+		except:
+			pass
+
+		# string or list
+		if type(prm) != list:
+			prm = [prm]
+
+		result = None
+		T = False
+		for joint in prm:
+			if all([T == False, joint in ["j3", "j4"]]):
+				result = self._home_joint_3_4()
+				T = True
+			else:	
+				result = self._home_joint(joint)
+		return result
+
+	# args: j0, j1, j2, j3 or j4
+	# 		list or JSON list
 	def home(self, prm):
 		try:
 			prm = json.loads(prm)
@@ -1460,33 +1482,74 @@ class Dorna(_port_usb, easy_method):
 			result = self._home_joint(joint)
 		return result
 
-	def _home_joint(self, joint):
-		if joint not in ["j0","j1", "j2", "j3", "j4"]:
-			return None
+	def _home_joint_3_4(self):
+		_input = [3,4]
+		# set_joint
+		self.set_joint({"j3": 0, "j4": 0}, True)
 
-		# homing
-		# job_1: home
-		command = {"command": "home", "prm": [joint]}
+		# remove all the probe inputs
+		for i in range(1,10):
+			command = "{di"+str(i)+"fn: 0}"
+			self.play({"command": "g2core", "prm":command}, append = True)
+		time.sleep(0.5)
+		# add di4fn: 4
+		self.play({"command": "g2core", "prm":"{di4fn: 4}"}, append = True)
+		time.sleep(0.5)
+		
+		# probe toward j4 -> 360
+		_result = self.probe({"j"+str(_input[-1]): 360, "speed": 5000}, append = True)		
+		if _result == None:
+			return None
+		_result = json.loads(_result)
+		t3 = - _result[4]
+
+		# back to where it started
+		command = {"command": "move", "prm": {"path": "joint", "movement": 0, "j4": 0, "speed": 5000}}
 		result = self.play(command, False)
 		result = json.loads(result)
-
 		if len(result) == 0:
 			return None
-
-		wait = self._wait_for_command(result, time.time()+120)
+		wait = self._wait_for_command(result, time.time()+1000)
 		if not wait:
 			return None
 
-		# calibration
-		if joint in ["j3", "j4"]:
-			clb = {"j3": self._config["calibrate"]["j3"], "j4": self._config["calibrate"]["j4"]}
-		else:
-			clb = {joint: self._config["calibrate"][joint]}
 
+		# remove all the probe inputs
+		for i in range(1,10):
+			command = "{di"+str(i)+"fn: 0}"
+			self.play({"command": "g2core", "prm":command}, append = True)
+		time.sleep(0.5)
+		# add di5fn: 4
+		self.play({"command": "g2core", "prm":"{di5fn: 4}"}, append = True)
+		time.sleep(0.5)
+
+		# probe toward j4 -> -360
+		_result = self.probe({"j"+str(_input[-1]): -360, "speed": 5000}, append = True)		
+		if _result == None:
+			return None
+		_result = json.loads(_result)
+		t4 = - _result[4]
+
+		# back to where it started
+		command = {"command": "move", "prm": {"path": "joint", "movement": 0, "j4": 0, "speed": 5000}}
+		result = self.play(command, False)
+		result = json.loads(result)
+		if len(result) == 0:
+			return None
+		wait = self._wait_for_command(result, time.time()+1000)
+		if not wait:
+			return None
+
+		travel = [-t3, -t4]
+		#joint = [0.5*(travel[1]-travel[0]), -0.5*(travel[1]+travel[0])]
+		joint = [0.5*(travel[1]-travel[0]), 0.5*(travel[1]+travel[0])]
 		# set_joint
-		return self.set_joint(clb)
+		#return self.set_joint({"j3": self._config["calibrate"]["j3"] + -(m4-m3)/2, "j4": self._config["calibrate"]["j4"] + (m4+m3)/2}, True)
+		return self.set_joint({"j3": self._config["calibrate"]["j3"] + joint[0], "j4": self._config["calibrate"]["j4"] + joint[1]}, True)
 
-	def home_backup(self, joint):
+
+
+	def _home_joint(self, joint):
 		if joint not in ["j0","j1", "j2", "j3", "j4"]:
 			return None
 
@@ -1523,7 +1586,7 @@ class Dorna(_port_usb, easy_method):
 		return self.position("joint")
 
 	# prm = {"j0":1, "j2":}
-	def probe(self, prm):
+	def probe(self, prm, append = False):
 		# read json
 		try:
 			prm = json.loads(prm)
@@ -1533,7 +1596,7 @@ class Dorna(_port_usb, easy_method):
 		# probing
 		# job_1: probe
 		command = {"command": "probe", "prm": prm}
-		result = self.play(command, False)
+		result = self.play(command, append)
 		result = json.loads(result)
 
 		if len(result) == 0:

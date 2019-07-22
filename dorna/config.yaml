@@ -1,11 +1,11 @@
 axis:
   number: 5
 calibrate:
-  j0: 0
-  j1: 145
-  j2: -90
-  j3: 0
-  j4: 0
+  j0: -8.2671
+  j1: 139.7344
+  j2: -87.1807
+  j3: 220.2257
+  j4:  -65.439
 default_jerk:
   joint:
   - 300
