@@ -15,7 +15,7 @@ After download, go to the directory, and run:
 ```bash
 python setup.py install
 ```
-## Dorna arm ROS
+## ROS
 For implementing Dorna with ROS, please visit the following [repo][ros].
 
 ## API initialization
