@@ -15,6 +15,9 @@ After download, go to the directory, and run:
 ```bash
 python setup.py install
 ```
+## ROS
+For implementing Dorna with ROS, please visit the following [repo][ros].
+
 ## API initialization
 
 Import the module and create a `Dorna` object for interacting with the API:
@@ -27,3 +30,4 @@ robot = Dorna()
 [wiki]:https://github.com/dorna-robotics/dorna/wiki
 [g2core]: https://github.com/synthetos/g2/wiki
 [latest]: https://github.com/dorna-robotics/dorna/releases/latest
+[ros]:https://github.com/rakutentech/dorna_arm_ros
