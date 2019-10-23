@@ -1445,7 +1445,7 @@ class Dorna(_port_usb, easy_method):
 
 	# args: j0, j1, j2, j3 or j4
 	# 		list or JSON list
-	def home_v2(self, prm):
+	def home(self, prm):
 		try:
 			prm = json.loads(prm)
 		except:
@@ -1467,7 +1467,7 @@ class Dorna(_port_usb, easy_method):
 
 	# args: j0, j1, j2, j3 or j4
 	# 		list or JSON list
-	def home(self, prm):
+	def home_backup(self, prm):
 		try:
 			prm = json.loads(prm)
 		except:
@@ -1482,6 +1482,14 @@ class Dorna(_port_usb, easy_method):
 			result = self._home_joint(joint)
 		return result
 
+	"""
+	# remove all the probes
+	{dixfn: 0}
+	add the probe
+	{di4fn: 4}
+
+	G38.3
+	"""
 	def _home_joint_3_4(self):
 		_input = [3,4]
 		# set_joint
