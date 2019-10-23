@@ -16,7 +16,7 @@ After download, go to the directory, and run:
 python setup.py install
 ```
 ## ROS
-For implementing Dorna with ROS, please visit the following [repo][ros].
+For implementing Dorna with ROS, please visit the [rakutentech/dorna_arm_ros][ros] repository.
 
 ## API initialization
 
