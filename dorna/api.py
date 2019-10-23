@@ -2434,7 +2434,7 @@ class Dorna(_port_usb, easy_method):
 	def _init_config(self):
 		# Read YAML file
 		with open(self._device["config"], 'r') as stream:
-			self._config = yaml.load(stream)
+			self._config = yaml.load(stream, Loader=yaml.SafeLoader)
 
 		if self._config["unit"]["length"] == "mm":
 			# speed_xyz
