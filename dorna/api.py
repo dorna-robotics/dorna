@@ -3394,6 +3394,56 @@ class Dorna(_port_usb, easy_method):
 			return {'gc_list':gc_list, 'travel_final':travel_final, 'status':result["status"], "message": result["message"]}
 		return {'gc_list':gc_list, 'travel_final':travel_final, 'status':result["status"]}
 
+		"""
+		Supported params:
+			offsets (I,J,K): center offset from current point
+			end point (X,Y,Z): End point (optional)
+			P: number of turns should be integer
+			circle axis (M): Should be one of 0 (Z)(default), 1(Y), 2(X)
+			movement: 0 absolute, 1 relative (default)
+			rotation_dirxn: 0 cw (default), 1 (ccw)
+		"""
+		def move_circle(self, prm, fulfill=True, append=True):
+			try:
+				prm = json.loads(prm)
+			except:
+				pass
+			# Set into cartesian coordinates
+			self.play({"command": "move", "prm": {"path": "line", "movement": 1, "x":0}}, True)
+			gcodes = []
+			circle_axis = 0
+			if 'movement' in prm and prm['movement'] == 0:
+				gcodes.append('G90')
+			else:
+				gcodes.append('G91')
+			if 'M' in prm:
+				gcodes.append('G'+str(17+prm['M']))
+				circle_axis=prm['M']
+			else:
+				gcodes.append('G17')
+
+			if (circle_axis == 0 and 'K' in prm or
+				circle_axis == 1 and 'J' in prm or
+				circle_axis == 2 and 'I' in prm):
+				print("Cannot provide offset along circle axis")
+
+			circle_command = ''
+
+			if 'rotation_dirxn' in prm and prm['rotation_dirxn'] == 1:
+				circle_command = circle_command + 'G3'
+			else:
+				circle_command = circle_command + 'G2'
+
+			for key in ['I', 'J', 'K', 'X', 'Y', 'Z', 'P']:
+				if key in prm:
+					circle_command = circle_command + ' ' + key + str(prm[key])
+			gcodes.append(circle_command)
+
+			for gcode in gcodes:
+				self.play({"command": "g2core", "prm": {'gc': gcode}}, append=True)
+
+
+
 	# {"command": "halt", "prm":0}
 	def _halt(self):
 		gc_list = ["!", "%"]
