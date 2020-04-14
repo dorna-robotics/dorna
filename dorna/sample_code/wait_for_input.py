@@ -19,4 +19,6 @@ while True:
 # Now do the remaining job	
 robot.play({"command": "move", "prm":{"path": "joint", "movement":1, "j0": 10}})
 
+# end the robot session
+robot.terminate()
 
