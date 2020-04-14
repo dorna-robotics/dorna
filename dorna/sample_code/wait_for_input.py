@@ -13,7 +13,6 @@ while True:
 	result = robot.io() # read the io
 	result = json.loads(result) # translate the json file into a python dictionary
 	if result["in1"] == 1:
-
 		break
 	time.sleep(0.001) # run this every 1ms until you get in1 equal to 1
 
