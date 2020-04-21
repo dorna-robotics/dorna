@@ -3707,7 +3707,7 @@ class Dorna(_port_usb, easy_method):
 			gc_list.append("{jt : "+str(prm["jt"]) +"}")
 		if "ct" in prm:
 			gc_list.append("{ct : "+str(prm["ct"]) +"}")
-		if "pcm" in prm:
+		if "gpa" in prm:
 			gc_list.append("{gpa : "+str(prm["gpa"]) +"}")
 
 		return {'gc_list':gc_list, 'status':0, "travel_final": np.copy(self._system["travel_final"])}
