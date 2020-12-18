@@ -1,33 +1,105 @@
-# Dorna
-[Dorna][dorna] is a 5-axis robotic arm, with industrial grade quality, offered at an affordable price for use in industrial or research applications. Dorna has maximum payload of about **1.1KG (2.5lbs)** and reach of about **500mm (20in)**. Dorna uses [g2core firmware][g2core] for its motor control and motion planning. On this Github repo you will find the API of Dorna that can be used to control the robot in Python.
-
-## Wiki
-For the full documentation visit the [dorna Wiki page][wiki].
+# Dorna2 
+This is a Python API for [Dorna 2][dorna] robotic arm.
 
 ## Installation
+Notice that the program has been tested only on Python 3.7+.
 
-**GitHub**  
-To install the Python package from GitHub, you need to clone the repository first.
+### Download
+First, use `git clone` to download the repository:  
 ```bash
-git clone https://github.com/dorna-robotics/dorna.git
+git clone https://github.com/dorna-robotics/dorna2-python.git
 ```
-After download, go to the directory, and run:
+Or simply download the zip file, and uncompress the file.  
+
+### Install
+Next, go to the downloaded directory, where the `setup.py` file is located, and run:
 ```bash
 python setup.py install
 ```
-## ROS
-For implementing Dorna with ROS, please visit the [rakutentech/dorna_arm_ros][ros] repository.
 
-## API initialization
-
-Import the module and create a `Dorna` object for interacting with the API:
-
+## Getting started
+Import `dorna2` module.
 ``` python
-from dorna import Dorna
-robot = Dorna()
+from dorna2 import dorna
+
+robot = dorna()
+ip = "127.0.0.1"
+host = 443
+robot.connect(ip, host)
+
+# your code
+
+robot.close() # always close the socket when you are done
+```  
+
+## Connection
+The robot WebSocket server runs on `ws://robot_ip_address:443`. Where `robot_ip_address` is the IP address of the robot, and `443` is the port number.   
+```python
+# example: if ip = dorna
+ws_url = "ws://dorna:443"
+
+# example: if ip = 192.168.1.2
+ws_url = "ws://192.168.1.2:443"
 ```
-[dorna]:https://dorna.ai/
-[wiki]:https://github.com/dorna-robotics/dorna/wiki
-[g2core]: https://github.com/synthetos/g2/wiki
-[latest]: https://github.com/dorna-robotics/dorna/releases/latest
-[ros]:https://github.com/rakutentech/dorna_arm_ros
+
+`.connect(host, port, wait=1, init=True)`
+Connect to the robot WebSocket server at `ws://host:port`. This method is very similar to the Python `socket.connect((host, port))` method. 
+`.sock` is the core Python `socket` object which is responsible for sending and receiving messages.  
+
+
+`.close()`
+Use this method to close the WS connection. It is a good practice to close an opened socket connection when your task is over and the connection is no longer required.
+Notice that `.close()` instantly closes the socket and terminates the communication loop.
+``` python
+from dorna2 import dorna
+
+robot = dorna()
+robot.connect("192.168.1.10", 443) # connect to ws://192.168.1.10:443
+
+# your code
+
+robot.close() # always close the socket when you are done
+```  
+
+## Send message
+`.play(message=None, **arg)`
+Send a valid message to the robot. There are multiple ways to send your message. Here we show how to send one simple alarm command in three different ways:
+1. JSON string format: `play('{"cmd": "alarm", "id": 100}')`
+2. Python dictionary format: `play({'cmd': 'alarm', 'id': 100})` 
+3. Key and value format: `play(cmd='alarm', id=100})`  
+
+There are other helper functions to send a message to the robot:
+- `.jmove(**arg)`: A helper function to send a `jmove` command. `jmove(j0=0, id=100)` is equivalent to sending `'{"cmd": "jmove", "j0": 0, "id": 100}'`. Basically the `"cmd"` key is set to `"jmove"`.  
+- `.lmove(**arg)`: Similar to `.jmove()` but the command key is equal to `"lmove"`.
+- `.cmove(**arg)`: Similar to `.cmove()` but the command key is equal to `"cmove"`.
+
+## Receive message
+`sys` is a dictionary that holds the messages received by the API. Notice that, `sys` initialized with an empty dictionary. Every time a new JSON received by the API, `sys` updates itself according to the received data.
+``` python
+print(robot.sys) # {}
+
+# command id = 100
+robot.play(cmd="jmove", rel=0, id=100, j1=90, j2=-90)
+robot.wait(id=100, stat=2)
+
+print(robot.sys) # {"id": 100, "stat": 2, ...}
+``` 
+The last 100 messages received by the API are stored in `msg` queue (`queue.Queue(100)`).
+``` python
+# print received messages 
+while True:
+	if not robot.msg.empty()
+		print(robot.msg.get())
+``` 
+`.wait(time_out=0, **arg)`
+Wait for a pattern of key and values to appear in the `.sys` dictionary. Use `wait` method to wait for the completion of a command with an `id`. 
+``` python
+# command id = 100
+robot.play(cmd = "jmove", rel = 0, id = 100, j1 = 90, j2 = -90)
+robot.wait(100)
+
+# {"id": 100, "stat": 2} has been received
+print("command with id = 100 has been completed")
+``` 
+
+[dorna]: https://dorna.ai
