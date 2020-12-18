@@ -9,7 +9,7 @@ First, use `git clone` to download the repository:
 ```bash
 git clone https://github.com/dorna-robotics/dorna2-python.git
 ```
-Or simply download the zip file, and uncompress the file.  
+Or simply download the [zip file](https://github.com/dorna-robotics/dorna/archive/master.zip), and uncompress the file.  
 
 ### Install
 Next, go to the downloaded directory, where the `setup.py` file is located, and run:
