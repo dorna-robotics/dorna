@@ -43,6 +43,7 @@ ws_url = "ws://192.168.1.2:443"
 ```
 
 `.connect(host, port, wait=1, init=True)`
+
 Connect to the robot WebSocket server at `ws://host:port`. This method is very similar to the Python `socket.connect((host, port))` method. 
 `.sock` is the core Python `socket` object which is responsible for sending and receiving messages.  
 
