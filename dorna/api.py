@@ -82,7 +82,7 @@ class easy_method(object):
 		False
 	sync
 		True
-		False	
+		False
 	"""
 	def set_io(self, prm, fulfill = True, append = True, sync = True):
 		try:
@@ -249,21 +249,21 @@ class easy_method(object):
 
 	"""
 	prm:
-		gcode = None, list, json list 
+		gcode = None, list, json list
 		gcode_path = None, string, json, list
 	"""
 	def play_gcode(self, gcode_path = None, gcode = None, **kwargs):
-		
+
 		data = False
 		# open gcode_path
 		if gcode_path:
 			try:
 				with open(gcode_path, 'r') as f:
-					data = f.read().splitlines()							
+					data = f.read().splitlines()
 			except:
 				data = False
 
-		# gcode: list, str, JSON, 
+		# gcode: list, str, JSON,
 		if gcode:
 			# str to data (dict or list)
 			if type(gcode) == str:
@@ -289,7 +289,7 @@ class easy_method(object):
 
 		# xyz space
 		self.play({"command": "move", "prm": {"path": "line", "movement": 1, "x": 0}}, append = False)
-		
+
 		return self.play(commands)
 
 
@@ -303,9 +303,9 @@ if the device passes the limits only joint works
 class Dorna(_port_usb, easy_method):
 
 	def __init__(self, config_path = None):
-		
+
 		super(Dorna, self).__init__()
-		
+
 		# =================================================================
 		# print
 		# =================================================================
@@ -586,7 +586,7 @@ class Dorna(_port_usb, easy_method):
 		"""
 		self._log_add({"status": 1, "message": "Progressing..."}, "update_firmware")
 		print("Progressing...")
-		
+
 
 		num_try = 8
 
@@ -698,7 +698,7 @@ class Dorna(_port_usb, easy_method):
 		"""
 		self._log_add({"status": 1, "message": "Progressing..."}, "update_firmware")
 		print("Progressing...")
-		
+
 
 		num_try = 8
 
@@ -850,7 +850,7 @@ class Dorna(_port_usb, easy_method):
 					# add to the log
 					self._log_add({"nom":_init_nom, "denom": denom}, "connect_percentage")
 				else:
-					time.sleep(0.02)				
+					time.sleep(0.02)
 			except Exception as e:
 				time.sleep(0.02)
 
@@ -866,7 +866,7 @@ class Dorna(_port_usb, easy_method):
 				# add to the log
 				self._log_add({"nom":_init_nom, "denom": denom}, "connect_percentage")
 			else:
-				time.sleep(0.02)				
+				time.sleep(0.02)
 
 	def _command_mask(self, command):
 		#_allowed_keys = ["id", "state", "error", "message", "command","prm","fulfill", "key"]
@@ -1225,7 +1225,7 @@ class Dorna(_port_usb, easy_method):
 					job.append([{"command": "g2core", "prm": "c"} for c in content])
 				except:
 					pass
-			
+
 			# number of jobs
 			_init_num = [0]
 			for j in job:
@@ -1667,7 +1667,7 @@ class Dorna(_port_usb, easy_method):
 		# not empty
 		if not prm:
 			return None
-		
+
 
 		# set_joint
 		if not self.set_joint(prm):
@@ -1700,12 +1700,12 @@ class Dorna(_port_usb, easy_method):
 		with open(self._device["config"], 'w') as yaml_file:
 			yaml.dump(_config_tmp, yaml_file, default_flow_style=False)
 		"""
-		
+
 		# add to log
 		self.config()
 
 		return self.position("joint")
-	
+
 	def calibrate_backup(self, prm):
 
 		# robot is homed
@@ -2633,7 +2633,7 @@ class Dorna(_port_usb, easy_method):
 		except:
 			pass
 
-		
+
 		if "j0" in limit and len(limit["j0"]) == 2 and limit["j0"][0]<= limit["j0"][1] :
 			self._config["limit"]["j0"] = limit["j0"]
 
@@ -2647,7 +2647,7 @@ class Dorna(_port_usb, easy_method):
 		#self.save_config()
 
 		return self.limit()
-	
+
 	def set_limit_backup(self, limit):
 		# json
 		try:
@@ -2733,12 +2733,12 @@ class Dorna(_port_usb, easy_method):
 			x = xyz[0]
 			y = xyz[1]
 			z = xyz[2]
-			
+
 			if self._config["unit"]["length"] == "mm":
 				x = self._mm_to_inch(x)
 				y = self._mm_to_inch(y)
-				z = self._mm_to_inch(z)			
-			
+				z = self._mm_to_inch(z)
+
 
 			alpha = xyz[3]
 			beta = xyz[4]
@@ -2934,7 +2934,7 @@ class Dorna(_port_usb, easy_method):
 				joint_achieve[i] = max(joint_final[i], self._config["limit"]["j"+ str(i)][0])
 				message = "initial position (joint: "+str(joint_init)+") is out of limit"
 				status = 100
-						
+
 			elif self._config["limit"]["j"+ str(i)][0] <= joint_init[i] <= self._config["limit"]["j"+ str(i)][1]:
 				# between
 				joint_achieve[i] = min(max(joint_final[i], self._config["limit"]["j"+ str(i)][0]),self._config["limit"]["j"+ str(i)][1] )
@@ -3167,12 +3167,12 @@ class Dorna(_port_usb, easy_method):
 		prm = prm_tmp
 
 		prm = json.dumps(prm)
-		return prm.replace('"', "")		
-	
+		return prm.replace('"', "")
+
 	def _M100 (self, prm):
 		prm = self._form_io(prm)
 		return {'gc_list': ["M100("+prm+")"], 'status':0}
-	
+
 	def _M100_backup (self, prm):
 		"""
 		prm = json.dumps(prm)
@@ -3676,7 +3676,7 @@ class Dorna(_port_usb, easy_method):
 		if "servo" in prm:
 			result["gc_list"] += self._servo(prm["servo"])["gc_list"]
 
-		return result		
+		return result
 
 	# {"command": "input", "prm":{"in1": 0, "in2":1, "in3":1}}
 	def _wait_for_input(self, prm):
@@ -3742,4 +3742,3 @@ class Dorna(_port_usb, easy_method):
 		# log toolhead
 		#self._log_add({"toolhead": json.loads(result)}, "config")
 		return self.config(["toolhead"])
-
